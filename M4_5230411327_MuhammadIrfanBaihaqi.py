@@ -89,7 +89,9 @@ def TambahDebiturBerdasarkanKTP():
                         return True
                     else:
                         print("LIMIT PINJAMAN HARUS BERUPA ANGKA\n")
-
+            elif cekAda == False:
+                print("NO. KTP SUDAH ADA DALAM DATABASE")
+                return True
         else:
             print("NIK ATAU NOMOR KTP HARUS BERUPA ANGKA")
 
@@ -98,7 +100,7 @@ def cekNama(namaPeminjam):
     for i in nama:
         if namaPeminjam == i.nama:
             return True
-        return False
+    return False
     
 def CekLimit(namaPeminjam, Pinjaman):
     for i in nama:
@@ -122,39 +124,41 @@ def tambahPinjaman():
     namaP = input("Masukkan Nama Peminjam: ")
     namaAda = cekNama(namaP)
     if namaAda == True:
-        pass
+        while True:
+            pinjamanBaruStr = input("Masukkan Nominal Pinjaman: ")
+            cek = pinjamanBaruStr.isdigit()
+            if cek == True:
+                pinjamanBaru = int(pinjamanBaruStr)
+                cekLimitnya = CekLimit(namaP, pinjamanBaru)
+                if cekLimitnya == True:
+                    while True:
+                        sukubungastr = input("Masukan Suku Bunga: ")
+                        limitwaktustr = input("Masukkan Limit Waktu (dalam bulan): ")
+                        ceksuku = sukubungastr.isdigit()
+                        cekwaktu = limitwaktustr.isdigit()
+                        if ceksuku == True and cekwaktu == True:
+                            sukubunga = int(sukubungastr)
+                            limitWaktu = int(limitwaktustr)
+                            # objekBaruPeminjam = ''
+                            for i in nama:
+                                if namaP == i.nama:
+                                    # MEMBUAT FUNGSI MENGHITUNG ANGSURAN
+                                    # pinjaman bunga bulan
+                                    angsuranPerBulan = hitungAngsuranPerBulan(pinjamanBaru, sukubunga, limitWaktu)
+                                    objekBaruPeminjam = Pinjaman(i.nama, i.KTP, i.limit, pinjamanBaru, sukubunga, limitWaktu, angsuranPerBulan)
+                                    listpinjaman.append(objekBaruPeminjam)
+                                    return True
+                        else:
+                            print("Masukan Harus Berupa Angka")
+                else:
+                    print("PINJAMAN MELEBIHI LIMIT / VALIDASI GAGAL")
+                    return True
+            else:
+                print("NOMINAL PINJAMAN HARUS BERUPA ANGKA")
     else:
         print("Nama Tidak Ada / Validasi Nama Gagal")
         return True
-    pinjamanBaruStr = input("Masukkan Nominal Pinjaman: ")
-    while True:
-        cek = pinjamanBaruStr.isdigit()
-        if cek == True:
-            pinjamanBaru = int(pinjamanBaruStr)
-            cekLimitnya = CekLimit(namaP, pinjamanBaru)
-            if cekLimitnya == True:
-                while True:
-                    sukubungastr = input("Masukan Suku Bunga: ")
-                    limitwaktustr = input("Masukkan Limit Waktu (dalam bulan): ")
-                    ceksuku = sukubungastr.isdigit()
-                    cekwaktu = limitwaktustr.isdigit()
-                    if ceksuku == True and cekwaktu == True:
-                        sukubunga = int(sukubungastr)
-                        limitWaktu = int(limitwaktustr)
-                        # objekBaruPeminjam = ''
-                        for i in nama:
-                            if namaP == i.nama:
-                                # MEMBUAT FUNGSI MENGHITUNG ANGSURAN
-                                # pinjaman bunga bulan
-                                angsuranPerBulan = hitungAngsuranPerBulan(pinjamanBaru, sukubunga, limitWaktu)
-                                objekBaruPeminjam = Pinjaman(i.nama, i.KTP, i.limit, pinjamanBaru, sukubunga, limitWaktu, angsuranPerBulan)
-                                listpinjaman.append(objekBaruPeminjam)
-                                return True
-            else:
-                print("PINJAMAN MELEBIHI LIMIT / VALIDASI GAGAL")
-                return True
-        else:
-            print("NOMINAL PINJAMAN HARUS BERUPA ANGKA")
+
 
 
 def tampilkanPinjaman():
@@ -164,7 +168,7 @@ def tampilkanPinjaman():
         print(f"Pinjaman: {i.pinjaman}")
         print(f"Bunga: {i.bunga}")
         print(f"Limit Waktu (bulan): {i.bulan}")
-        print(f"Angsuran per Bulan: {i.angsuran}")
+        print(f"Angsuran per Bulan: {i.angsuran}\n")
 
 def menuutama():
     while True:
@@ -212,12 +216,6 @@ def submenuKelolaPinjaman():
 
 
 def tambahPinjamanVerManual(namabaru,pinjaman, bunga, bulan):
-    # namaAda = cekNama(namabaru)
-    # if namaAda == True:
-    #     pass
-    # else:
-    #     print("Nama Tidak Ada / Validasi Nama Gagal")
-    #     return True
     objekBaruPeminjam = ""
     for i in nama:
         if namabaru == i.nama:
