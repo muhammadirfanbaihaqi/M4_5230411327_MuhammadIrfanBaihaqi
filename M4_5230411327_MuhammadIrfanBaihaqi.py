@@ -152,6 +152,7 @@ def tambahPinjaman():
                                 return True
             else:
                 print("PINJAMAN MELEBIHI LIMIT / VALIDASI GAGAL")
+                return True
         else:
             print("NOMINAL PINJAMAN HARUS BERUPA ANGKA")
 
